@@ -1,10 +1,11 @@
 # Author: Francisco De La Cruz <dlcs.frank@gmail.com>
 # Date: Nov 8, 2011
-# Crude/Naive FEN array to algebraic notation converter
+# Crude/Naive FEN array to algebraic notation converter for ruby 1.9.1
+
+#NOTE: This code does not work with ruby < 1.9.1
 require 'enumerator'
 require 'benchmark' 
-# For ruby < 1.9.1 uncomment the line below
-#require 'jcode'
+
 moves = []
 CHAR='_'
 FENS = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0",
@@ -17,12 +18,11 @@ FENS = Array["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0",
 "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4P3/PPP2PPP/RNBQKBNR w KQkq - 1 2"]
 =end
 
-FENS.collect { |fen|
+FENS.map! { |fen|
   fen[0,fen.index(/\s/)].split('/').each { |rank|
     rank.gsub!(/\d/) {|d| CHAR*Integer(d) }
   }
-}
-  .each_cons(2) { |a, b| 
+}.each_cons(2) { |a, b| 
   rank=0
   a.zip(b).each do |ra, rb|
     8.times {|file|
@@ -44,4 +44,7 @@ FENS.collect { |fen|
   end
 }
 # Just print them, for now !
+puts "==Generated Boards=="
+puts FENS
+puts "==Calculated Moves=="
 puts moves
